@@ -16,7 +16,7 @@ export function AdminLayout() {
             <aside className="admin-sidebar">
                 <div className="admin-sidebar-header">
                     <h2 className="admin-logo">⚡ Admin</h2>
-                    <p className="admin-user-email">{user?.email}</p>
+                    <p className="admin-user-email">{user?.username}</p>
                 </div>
 
                 <nav className="admin-nav">
