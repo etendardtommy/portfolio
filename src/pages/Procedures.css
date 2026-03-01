@@ -1,0 +1,123 @@
+.articles-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    margin-top: 3rem;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.article-card {
+    display: flex;
+    flex-direction: column;
+    padding: 2rem;
+    border-radius: var(--radius-lg);
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    transition: all var(--transition-normal);
+    text-decoration: none;
+    color: inherit;
+}
+
+.article-card:hover {
+    transform: translateY(-3px) scale(1.01);
+    box-shadow: var(--shadow-md);
+    border-color: var(--brand-primary);
+}
+
+.article-meta {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    font-size: 0.875rem;
+    color: var(--text-tertiary);
+}
+
+.article-date {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.article-title {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+    transition: color var(--transition-fast);
+}
+
+.article-card:hover .article-title {
+    color: var(--brand-primary);
+}
+
+.article-excerpt {
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+}
+
+.article-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+    border-top: 1px solid var(--border-color);
+    padding-top: 1rem;
+}
+
+.article-tags {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.article-tag {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: var(--radius-full);
+    background-color: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+}
+
+.read-more {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--brand-primary);
+}
+
+.search-container {
+    position: relative;
+    max-width: 500px;
+    margin: 0 auto 3rem auto;
+}
+
+.search-input {
+    width: 100%;
+    padding: 1rem 1rem 1rem 3rem;
+    border-radius: var(--radius-full);
+    border: 1px solid var(--border-color);
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    font-family: inherit;
+    font-size: 1rem;
+    outline: none;
+    transition: all var(--transition-fast);
+}
+
+.search-input:focus {
+    border-color: var(--brand-primary);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+
+.search-icon {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-tertiary);
+}

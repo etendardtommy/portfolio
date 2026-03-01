@@ -1,0 +1,130 @@
+.admin-database {
+    max-width: 1200px;
+}
+
+.db-layout {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 1.5rem;
+    min-height: 500px;
+}
+
+/* Sidebar */
+.db-sidebar {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 1rem;
+}
+
+.db-sidebar h3 {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-tertiary);
+    margin-bottom: 0.75rem;
+    padding: 0 0.5rem;
+}
+
+.db-table-btn {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0.55rem 0.75rem;
+    background: transparent;
+    border: none;
+    border-radius: var(--radius-md);
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    text-align: left;
+}
+
+.db-table-btn:hover {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    transform: none;
+    box-shadow: none;
+}
+
+.db-table-btn.active {
+    background: rgba(59, 130, 246, 0.1);
+    color: var(--brand-primary);
+    font-weight: 600;
+}
+
+.db-count {
+    font-size: 0.75rem;
+    background: var(--bg-tertiary);
+    padding: 0.15rem 0.5rem;
+    border-radius: var(--radius-full);
+    color: var(--text-tertiary);
+}
+
+.db-table-btn.active .db-count {
+    background: rgba(59, 130, 246, 0.15);
+    color: var(--brand-primary);
+}
+
+/* Content */
+.db-content {
+    min-width: 0;
+}
+
+.db-empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: var(--text-tertiary);
+}
+
+.db-table-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.db-table-header h2 {
+    font-size: 1.25rem;
+    margin: 0;
+    font-family: 'Consolas', 'Monaco', monospace;
+}
+
+.db-row-count {
+    font-size: 0.85rem;
+    color: var(--text-tertiary);
+    background: var(--bg-secondary);
+    padding: 0.2rem 0.65rem;
+    border-radius: var(--radius-full);
+}
+
+.db-columns-info {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-bottom: 1rem;
+}
+
+.db-column-badge {
+    font-size: 0.75rem;
+    padding: 0.2rem 0.6rem;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-full);
+    color: var(--text-secondary);
+}
+
+.db-column-badge small {
+    color: var(--text-tertiary);
+    font-size: 0.7rem;
+}
+
+@media (max-width: 768px) {
+    .db-layout {
+        grid-template-columns: 1fr;
+    }
+}

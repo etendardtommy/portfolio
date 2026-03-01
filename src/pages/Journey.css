@@ -1,0 +1,121 @@
+.timeline-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem 0;
+    position: relative;
+}
+
+.timeline-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 2rem;
+    width: 2px;
+    background-color: var(--border-color);
+    transform: translateX(-50%);
+}
+
+.timeline-item {
+    position: relative;
+    margin-bottom: 3rem;
+    padding-left: 5rem;
+}
+
+.timeline-item:last-child {
+    margin-bottom: 0;
+}
+
+.timeline-dot {
+    position: absolute;
+    left: 2rem;
+    top: 0.5rem;
+    width: 1rem;
+    height: 1rem;
+    border-radius: 50%;
+    background-color: var(--brand-primary);
+    transform: translateX(-50%);
+    border: 4px solid var(--bg-primary);
+    box-shadow: 0 0 0 2px var(--brand-primary);
+    transition: all var(--transition-fast);
+}
+
+.timeline-item:hover .timeline-dot {
+    transform: translateX(-50%) scale(1.2);
+    background-color: var(--brand-accent);
+    box-shadow: 0 0 0 2px var(--brand-accent);
+}
+
+.timeline-content {
+    padding: 1.5rem;
+    border-radius: var(--radius-lg);
+    transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+}
+
+.timeline-item:hover .timeline-content {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.timeline-date {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--brand-primary);
+    margin-bottom: 0.5rem;
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    background-color: rgba(59, 130, 246, 0.1);
+    border-radius: var(--radius-full);
+}
+
+.timeline-title {
+    font-size: 1.25rem;
+    margin-bottom: 0.25rem;
+}
+
+.timeline-subtitle {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+    margin-bottom: 1rem;
+}
+
+.timeline-description {
+    margin-bottom: 1rem;
+}
+
+.skill-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.skill-tag {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.75rem;
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-full);
+    color: var(--text-secondary);
+}
+
+.timeline-filters {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 3rem;
+}
+
+@media (max-width: 600px) {
+    .timeline-container::before {
+        left: 1rem;
+    }
+
+    .timeline-dot {
+        left: 1rem;
+    }
+
+    .timeline-item {
+        padding-left: 3.5rem;
+    }
+}
