@@ -1,8 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Briefcase, GraduationCap } from 'lucide-react';
+import { useApi } from '../hooks/useApi';
 import './Journey.css';
-
-const API_URL = import.meta.env.VITE_API_URL || 'http://192.168.1.50:5000';
 
 type TimelineEvent = {
     id: number;
@@ -16,28 +15,11 @@ type TimelineEvent = {
 
 export function Journey() {
     const [filter, setFilter] = useState<'all' | 'work' | 'education'>('all');
-    const [experiences, setExperiences] = useState<TimelineEvent[]>([]);
-    const [loading, setLoading] = useState(true);
+    const { data: experiences = [], loading } = useApi<TimelineEvent[]>('/api/experiences');
 
-    useEffect(() => {
-        const fetchExperiences = async () => {
-            try {
-                const res = await fetch(`${API_URL}/api/experiences`);
-                if (!res.ok) throw new Error('Failed to fetch');
-                const data = await res.json();
-                setExperiences(data);
-            } catch (err) {
-                console.error('Erreur de chargement des expériences', err);
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchExperiences();
-    }, []);
-
-    const filteredData = experiences.filter(item =>
+    const filteredData = experiences?.filter(item =>
         filter === 'all' ? true : item.type === filter
-    );
+    ) || [];
 
     const parseSkills = (skills: string): string[] => {
         if (!skills) return [];

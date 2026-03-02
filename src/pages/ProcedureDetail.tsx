@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft, Calendar } from 'lucide-react';
 import DOMPurify from 'dompurify';
+import { useApi } from '../hooks/useApi';
 import './ProcedureDetail.css';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
@@ -17,24 +17,7 @@ type Article = {
 
 export function ProcedureDetail() {
     const { id } = useParams<{ id: string }>();
-    const [article, setArticle] = useState<Article | null>(null);
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        const fetchArticle = async () => {
-            try {
-                const res = await fetch(`${API_URL}/api/articles/${id}`);
-                if (!res.ok) throw new Error('Not found');
-                const data = await res.json();
-                setArticle(data);
-            } catch (err) {
-                console.error('Erreur chargement article', err);
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchArticle();
-    }, [id]);
+    const { data: article, loading } = useApi<Article>(`/api/articles/${id}`);
 
     const formatDate = (dateStr: string) => {
         return new Date(dateStr).toLocaleDateString('fr-FR', {

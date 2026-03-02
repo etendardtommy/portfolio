@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Calendar, Search, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useApi } from '../hooks/useApi';
 import './Procedures.css';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
@@ -17,25 +18,10 @@ type Article = {
 
 export function Procedures() {
     const [searchTerm, setSearchTerm] = useState('');
-    const [articles, setArticles] = useState<Article[]>([]);
-    const [loading, setLoading] = useState(true);
+    const { data, loading } = useApi<Article[]>('/api/articles');
 
-    useEffect(() => {
-        const fetchArticles = async () => {
-            try {
-                const res = await fetch(`${API_URL}/api/articles`);
-                if (!res.ok) throw new Error('Failed to fetch');
-                const data = await res.json();
-                // Afficher uniquement les articles publiés
-                setArticles(data.filter((a: Article) => a.published));
-            } catch (err) {
-                console.error('Erreur de chargement des articles', err);
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchArticles();
-    }, []);
+    // Afficher uniquement les articles publiés
+    const articles = data ? data.filter((a) => a.published) : [];
 
     const formatDate = (dateStr: string) => {
         return new Date(dateStr).toLocaleDateString('fr-FR', {

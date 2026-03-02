@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft, ExternalLink, Github } from 'lucide-react';
+import { useApi } from '../hooks/useApi';
 import './ProjectDetail.css';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
@@ -17,26 +17,7 @@ type Project = {
 
 export function ProjectDetail() {
     const { id } = useParams<{ id: string }>();
-    const [project, setProject] = useState<Project | null>(null);
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        const fetchProject = async () => {
-            try {
-                const res = await fetch(`${API_URL}/api/portfolio/projects/${id}`, {
-                    headers: { 'x-site-id': '1' }
-                });
-                if (!res.ok) throw new Error('Not found');
-                const data = await res.json();
-                setProject(data);
-            } catch (err) {
-                console.error('Erreur chargement projet', err);
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchProject();
-    }, [id]);
+    const { data: project, loading } = useApi<Project>(`/api/portfolio/projects/${id}`);
 
     const getImageSource = (url: string | null) => {
         if (!url) return null;

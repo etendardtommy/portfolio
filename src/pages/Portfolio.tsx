@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
 import { ExternalLink, Github } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useApi } from '../hooks/useApi';
 import './Portfolio.css';
 
 type Project = {
@@ -17,27 +17,8 @@ type Project = {
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 export function Portfolio() {
-    const [projects, setProjects] = useState<Project[]>([]);
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        const fetchProjects = async () => {
-            try {
-                const res = await fetch(`${API_URL}/api/portfolio/projects`, {
-                    headers: { 'x-site-id': '1' } // Assuming siteId 1 for the main portfolio
-                });
-                if (!res.ok) throw new Error('Failed to fetch');
-                const data = await res.json();
-                // Afficher uniquement les projets publiés
-                setProjects(data.filter((p: Project) => p.published));
-            } catch (err) {
-                console.error('Erreur de chargement des projets', err);
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchProjects();
-    }, []);
+    const { data, loading } = useApi<Project[]>('/api/portfolio/projects');
+    const projects = data ? data.filter((p) => p.published) : [];
 
     const getImageSource = (url: string | null) => {
         if (!url) return null;
