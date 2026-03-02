@@ -57,6 +57,8 @@
     font-size: 1.05rem;
     line-height: 1.8;
     color: var(--text-secondary);
+    overflow-x: hidden;
+    word-break: break-word;
 }
 
 .article-detail-content h2 {

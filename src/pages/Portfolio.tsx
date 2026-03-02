@@ -1,18 +1,20 @@
 import { useState, useEffect } from 'react';
 import { ExternalLink, Github } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import './Portfolio.css';
 
 type Project = {
     id: number;
     title: string;
     description: string;
-    image_url: string;
-    demo_url: string;
-    github_url: string;
-    tags: string[];
+    imageUrl: string | null;
+    liveUrl: string | null;
+    githubUrl: string | null;
+    technologies: string[];
+    published: boolean;
 };
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 export function Portfolio() {
     const [projects, setProjects] = useState<Project[]>([]);
@@ -21,10 +23,13 @@ export function Portfolio() {
     useEffect(() => {
         const fetchProjects = async () => {
             try {
-                const res = await fetch(`${API_URL}/api/projects`);
+                const res = await fetch(`${API_URL}/api/portfolio/projects`, {
+                    headers: { 'x-site-id': '1' } // Assuming siteId 1 for the main portfolio
+                });
                 if (!res.ok) throw new Error('Failed to fetch');
                 const data = await res.json();
-                setProjects(data);
+                // Afficher uniquement les projets publiés
+                setProjects(data.filter((p: Project) => p.published));
             } catch (err) {
                 console.error('Erreur de chargement des projets', err);
             } finally {
@@ -33,6 +38,13 @@ export function Portfolio() {
         };
         fetchProjects();
     }, []);
+
+    const getImageSource = (url: string | null) => {
+        if (!url) return null;
+        if (url.startsWith('http')) return url;
+        // Construct full URL for backend images
+        return `${API_URL}${url}`;
+    };
 
     return (
         <div className="container section animate-fade-in">
@@ -50,10 +62,10 @@ export function Portfolio() {
                 ) : projects.length === 0 ? (
                     <p style={{ textAlign: 'center', gridColumn: '1 / -1', color: 'var(--text-tertiary)' }}>Aucun projet pour le moment.</p>
                 ) : projects.map((project) => (
-                    <div key={project.id} className="project-card animate-fade-in">
+                    <Link key={project.id} to={`/portfolio/${project.id}`} className="project-card animate-fade-in" style={{ textDecoration: 'none', color: 'inherit' }}>
                         <div className="project-image-container">
-                            {project.image_url ? (
-                                <img src={project.image_url} alt={project.title} className="project-image" />
+                            {project.imageUrl ? (
+                                <img src={getImageSource(project.imageUrl)!} alt={project.title} className="project-image" />
                             ) : (
                                 <div className="project-placeholder">Image Projet</div>
                             )}
@@ -62,24 +74,24 @@ export function Portfolio() {
                             <h3 className="project-title">{project.title}</h3>
                             <p className="project-description">{project.description}</p>
                             <div className="project-tags">
-                                {project.tags?.map((tag, index) => (
-                                    <span key={index} className="project-tag">{tag}</span>
+                                {project.technologies?.map((tech, index) => (
+                                    <span key={index} className="project-tag">{tech}</span>
                                 ))}
                             </div>
                             <div className="project-links">
-                                {project.demo_url && (
-                                    <a href={project.demo_url} target="_blank" rel="noopener noreferrer" className="project-link">
+                                {project.liveUrl && (
+                                    <a href={project.liveUrl} target="_blank" rel="noopener noreferrer" className="project-link">
                                         <ExternalLink size={16} /> Site en ligne
                                     </a>
                                 )}
-                                {project.github_url && (
-                                    <a href={project.github_url} target="_blank" rel="noopener noreferrer" className="project-link">
+                                {project.githubUrl && (
+                                    <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" className="project-link">
                                         <Github size={16} /> Code source
                                     </a>
                                 )}
                             </div>
                         </div>
-                    </div>
+                    </Link>
                 ))}
             </div>
         </div>

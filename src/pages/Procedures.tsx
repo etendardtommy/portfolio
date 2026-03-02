@@ -3,14 +3,15 @@ import { Calendar, Search, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import './Procedures.css';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://192.168.1.50:5000';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 type Article = {
     id: number;
     title: string;
-    excerpt: string;
-    tags: string;
-    created_at: string;
+    excerpt: string | null;
+    tags: string[];
+    imageUrl: string | null;
+    createdAt: string;
     published: boolean;
 };
 
@@ -36,11 +37,6 @@ export function Procedures() {
         fetchArticles();
     }, []);
 
-    const parseTags = (tags: string): string[] => {
-        if (!tags) return [];
-        return tags.split(',').map(s => s.trim()).filter(Boolean);
-    };
-
     const formatDate = (dateStr: string) => {
         return new Date(dateStr).toLocaleDateString('fr-FR', {
             day: 'numeric',
@@ -49,10 +45,19 @@ export function Procedures() {
         });
     };
 
-    const filteredArticles = articles.filter(article =>
-        article.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        (article.tags && article.tags.toLowerCase().includes(searchTerm.toLowerCase()))
-    );
+    const getImageSource = (url: string | null) => {
+        if (!url) return null;
+        if (url.startsWith('http')) return url;
+        // Construct full URL for backend images
+        return `${API_URL}${url}`;
+    };
+
+    const filteredArticles = articles.filter(article => {
+        const searchLower = searchTerm.toLowerCase();
+        const matchesTitle = article.title.toLowerCase().includes(searchLower);
+        const matchesTags = article.tags && article.tags.some(t => t.toLowerCase().includes(searchLower));
+        return matchesTitle || matchesTags;
+    });
 
     return (
         <div className="container section animate-fade-in">
@@ -83,16 +88,31 @@ export function Procedures() {
                 ) : filteredArticles.length > 0 ? (
                     filteredArticles.map(article => (
                         <Link to={`/procedures/${article.id}`} key={article.id} className="article-card animate-fade-in">
+                            {article.imageUrl && (
+                                <div className="article-cover" style={{
+                                    height: '180px',
+                                    borderRadius: '8px',
+                                    overflow: 'hidden',
+                                    marginBottom: '1rem',
+                                }}>
+                                    <img
+                                        src={getImageSource(article.imageUrl)!}
+                                        alt={article.title}
+                                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                    />
+                                </div>
+                            )}
                             <div className="article-meta">
                                 <span className="article-date">
-                                    <Calendar size={14} /> {formatDate(article.created_at)}
+                                    <Calendar size={14} /> {formatDate(article.createdAt)}
                                 </span>
                             </div>
                             <h2 className="article-title">{article.title}</h2>
-                            <p className="article-excerpt">{article.excerpt}</p>
+                            {article.excerpt && <p className="article-excerpt">{article.excerpt}</p>}
+
                             <div className="article-footer">
                                 <div className="article-tags">
-                                    {parseTags(article.tags).map(tag => (
+                                    {article.tags && article.tags.map(tag => (
                                         <span key={tag} className="article-tag">{tag}</span>
                                     ))}
                                 </div>

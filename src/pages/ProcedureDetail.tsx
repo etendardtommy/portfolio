@@ -1,16 +1,18 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft, Calendar } from 'lucide-react';
+import DOMPurify from 'dompurify';
 import './ProcedureDetail.css';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://192.168.1.50:5000';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 type Article = {
     id: number;
     title: string;
-    content: string;
-    tags: string;
-    created_at: string;
+    htmlContent: string;
+    imageUrl: string | null;
+    tags: string[];
+    createdAt: string;
 };
 
 export function ProcedureDetail() {
@@ -34,17 +36,19 @@ export function ProcedureDetail() {
         fetchArticle();
     }, [id]);
 
-    const parseTags = (tags: string): string[] => {
-        if (!tags) return [];
-        return tags.split(',').map(s => s.trim()).filter(Boolean);
-    };
-
     const formatDate = (dateStr: string) => {
         return new Date(dateStr).toLocaleDateString('fr-FR', {
             day: 'numeric',
             month: 'long',
             year: 'numeric',
         });
+    };
+
+    const getImageSource = (url: string | null) => {
+        if (!url) return null;
+        if (url.startsWith('http')) return url;
+        // Construct full URL for backend images
+        return `${API_URL}${url}`;
     };
 
     if (loading) {
@@ -71,14 +75,30 @@ export function ProcedureDetail() {
             </Link>
 
             <article className="article-detail">
+                {article.imageUrl && (
+                    <div className="article-detail-cover" style={{
+                        width: '100%',
+                        height: '400px',
+                        borderRadius: '16px',
+                        overflow: 'hidden',
+                        marginBottom: '2rem',
+                    }}>
+                        <img
+                            src={getImageSource(article.imageUrl)!}
+                            alt={article.title}
+                            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                        />
+                    </div>
+                )}
+
                 <header className="article-detail-header">
                     <h1>{article.title}</h1>
                     <div className="article-detail-meta">
                         <span className="article-detail-date">
-                            <Calendar size={14} /> {formatDate(article.created_at)}
+                            <Calendar size={14} /> {formatDate(article.createdAt)}
                         </span>
                         <div className="article-detail-tags">
-                            {parseTags(article.tags).map(tag => (
+                            {article.tags && article.tags.map(tag => (
                                 <span key={tag} className="article-tag">{tag}</span>
                             ))}
                         </div>
@@ -87,7 +107,7 @@ export function ProcedureDetail() {
 
                 <div
                     className="article-detail-content"
-                    dangerouslySetInnerHTML={{ __html: article.content }}
+                    dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(article.htmlContent || '') }}
                 />
             </article>
         </div>

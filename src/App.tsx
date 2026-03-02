@@ -3,6 +3,7 @@ import { Layout } from './components/Layout';
 import { Home } from './pages/Home';
 import { Journey } from './pages/Journey';
 import { Portfolio } from './pages/Portfolio';
+import { ProjectDetail } from './pages/ProjectDetail';
 import { Procedures } from './pages/Procedures';
 import { ProcedureDetail } from './pages/ProcedureDetail';
 import { Contact } from './pages/Contact';
@@ -16,6 +17,7 @@ function App() {
           <Route index element={<Home />} />
           <Route path="journey" element={<Journey />} />
           <Route path="portfolio" element={<Portfolio />} />
+          <Route path="portfolio/:id" element={<ProjectDetail />} />
           <Route path="procedures" element={<Procedures />} />
           <Route path="procedures/:id" element={<ProcedureDetail />} />
           <Route path="contact" element={<Contact />} />
