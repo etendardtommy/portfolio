@@ -1,4 +1,4 @@
-import { Github, Linkedin, Twitter } from 'lucide-react';
+import { Github, Linkedin } from 'lucide-react';
 import './Footer.css';
 
 export function Footer() {
@@ -9,7 +9,6 @@ export function Footer() {
                 <div className="social-links">
                     <a href="#" aria-label="GitHub" className="social-icon" target="_blank" rel="noopener noreferrer"><Github size={20} /></a>
                     <a href="#" aria-label="LinkedIn" className="social-icon" target="_blank" rel="noopener noreferrer"><Linkedin size={20} /></a>
-                    <a href="#" aria-label="Twitter" className="social-icon" target="_blank" rel="noopener noreferrer"><Twitter size={20} /></a>
                 </div>
             </div>
         </footer>
