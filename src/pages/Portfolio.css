@@ -17,9 +17,9 @@
 }
 
 .project-card:hover {
-    transform: translateY(-5px);
-    box-shadow: var(--shadow-lg);
-    border-color: var(--brand-primary);
+    transform: translateY(-8px);
+    box-shadow: 0 12px 24px -8px rgba(59, 130, 246, 0.25);
+    border-color: rgba(59, 130, 246, 0.4);
 }
 
 .project-image-container {
@@ -37,7 +37,7 @@
 }
 
 .project-card:hover .project-image {
-    transform: scale(1.05);
+    transform: scale(1.08);
 }
 
 .project-placeholder {

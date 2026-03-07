@@ -4,10 +4,10 @@ import './Home.css';
 
 export function Home() {
     return (
-        <div className="home-page animate-fade-in">
+        <div className="home-page">
             <section className="hero-section">
                 <div className="container hero-content">
-                    <div className="hero-text">
+                    <div className="hero-text animate-fade-in">
                         <h1 className="hero-title">
                             Bonjour, je suis <br />
                             <span className="gradient-text">Tommy</span> <br />
@@ -18,7 +18,7 @@ export function Home() {
                             et mes articles techniques. Passionné par la création d'interfaces
                             modernes et intuitives.
                         </p>
-                        <div className="hero-actions">
+                        <div className="hero-actions animate-fade-in delay-100">
                             <Link to="/portfolio" className="btn-primary">
                                 Voir mes projets <ArrowRight size={18} />
                             </Link>
@@ -27,9 +27,8 @@ export function Home() {
                             </a>
                         </div>
                     </div>
-                    <div className="hero-visual">
+                    <div className="hero-visual animate-fade-in delay-200">
                         <div className="blob-shape"></div>
-                        {/* Vous pourrez ajouter votre photo ici plus tard */}
                         <div className="glass-panel profile-placeholder">
                             <span>Photo de Profil</span>
                         </div>

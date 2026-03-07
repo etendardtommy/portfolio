@@ -4,7 +4,7 @@ import DOMPurify from 'dompurify';
 import { useApi } from '../hooks/useApi';
 import './ProcedureDetail.css';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+const SERVER_URL = import.meta.env.VITE_SERVER_URL || 'http://localhost:3000';
 
 type Article = {
     id: number;
@@ -17,7 +17,7 @@ type Article = {
 
 export function ProcedureDetail() {
     const { id } = useParams<{ id: string }>();
-    const { data: article, loading } = useApi<Article>(`/api/articles/${id}`);
+    const { data: article, loading } = useApi<Article>(`/articles/${id}`);
 
     const formatDate = (dateStr: string) => {
         return new Date(dateStr).toLocaleDateString('fr-FR', {
@@ -31,7 +31,7 @@ export function ProcedureDetail() {
         if (!url) return null;
         if (url.startsWith('http')) return url;
         // Construct full URL for backend images
-        return `${API_URL}${url}`;
+        return `${SERVER_URL}${url}`;
     };
 
     if (loading) {

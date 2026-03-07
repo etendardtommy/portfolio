@@ -3,7 +3,7 @@ import { ArrowLeft, ExternalLink, Github } from 'lucide-react';
 import { useApi } from '../hooks/useApi';
 import './ProjectDetail.css';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+const SERVER_URL = import.meta.env.VITE_SERVER_URL || 'http://localhost:3000';
 
 type Project = {
     id: number;
@@ -17,12 +17,12 @@ type Project = {
 
 export function ProjectDetail() {
     const { id } = useParams<{ id: string }>();
-    const { data: project, loading } = useApi<Project>(`/api/portfolio/projects/${id}`);
+    const { data: project, loading } = useApi<Project>(`/portfolio/projects/${id}`);
 
     const getImageSource = (url: string | null) => {
         if (!url) return null;
         if (url.startsWith('http')) return url;
-        return `${API_URL}${url}`;
+        return `${SERVER_URL}${url}`;
     };
 
     if (loading) {

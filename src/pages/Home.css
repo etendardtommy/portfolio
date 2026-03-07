@@ -47,6 +47,8 @@
 
 .btn-primary:hover {
     background-color: var(--brand-primary-hover);
+    color: white !important;
+    /* Force text to stay white against global a:hover */
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
 }
@@ -66,6 +68,7 @@
 
 .btn-outline:hover {
     background-color: var(--bg-secondary);
+    color: var(--text-primary);
     border-color: var(--text-secondary);
     transform: translateY(-2px);
 }
@@ -81,22 +84,49 @@
     position: absolute;
     width: 400px;
     height: 400px;
-    background: linear-gradient(135deg, var(--brand-primary), var(--brand-accent));
-    border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
-    filter: blur(60px);
-    opacity: 0.2;
-    animation: morph 8s ease-in-out infinite both alternate;
+    background: var(--brand-primary);
+    border-radius: 50%;
+    filter: blur(100px);
+    /* Massive blur for a soft light effect */
+    opacity: 0.4;
+    animation: ambientPulse 6s ease-in-out infinite alternate;
     z-index: -1;
 }
 
-@keyframes morph {
+.blob-shape::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 300px;
+    height: 300px;
+    background: var(--brand-accent);
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.6;
+    /* This creates a second light source that smoothly orbits the center */
+    animation: ambientOrbit 10s linear infinite;
+}
+
+@keyframes ambientPulse {
     0% {
-        border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+        transform: scale(0.9);
+        opacity: 0.3;
     }
 
     100% {
-        border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
-        transform: rotate(10deg);
+        transform: scale(1.2);
+        opacity: 0.5;
+    }
+}
+
+@keyframes ambientOrbit {
+    0% {
+        transform: translate(-50%, -50%) rotate(0deg) translateX(80px);
+    }
+
+    100% {
+        transform: translate(-50%, -50%) rotate(360deg) translateX(80px);
     }
 }
 
@@ -111,6 +141,10 @@
     font-weight: 500;
     color: var(--text-secondary);
     box-shadow: var(--shadow-lg);
+    background-color: var(--bg-primary);
+    /* Ensure it has a solid background to block light underneath */
+    position: relative;
+    z-index: 2;
 }
 
 @media (max-width: 900px) {

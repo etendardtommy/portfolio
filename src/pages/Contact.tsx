@@ -29,8 +29,8 @@ export function Contact() {
     };
 
     return (
-        <div className="container section animate-fade-in">
-            <div style={{ textAlign: 'center' }}>
+        <div className="container section">
+            <div style={{ textAlign: 'center' }} className="animate-fade-in">
                 <h1 className="gradient-text">Contactez-moi</h1>
                 <p style={{ maxWidth: '600px', margin: '0 auto' }}>
                     Une question, une proposition de projet ou simplement envie d'échanger ?
@@ -39,7 +39,7 @@ export function Contact() {
             </div>
 
             <div className="contact-wrapper">
-                <div className="contact-info animate-fade-in">
+                <div className="contact-info animate-fade-in delay-100">
                     <p className="contact-text">
                         Je suis toujours ouvert aux nouvelles opportunités professionnelles,
                         en particulier celles impliquant des technologies modernes comme React,
@@ -69,7 +69,10 @@ export function Contact() {
                     </div>
                 </div>
 
-                <form className="glass-panel contact-form animate-fade-in" onSubmit={handleSubmit}>
+                <form
+                    className="glass-panel contact-form animate-fade-in delay-200"
+                    onSubmit={handleSubmit}
+                >
                     <h2>Envoyer un message</h2>
 
                     {status === 'sent' && (
