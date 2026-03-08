@@ -10,6 +10,7 @@ const SERVER_URL = process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'
 type Article = {
     id: number;
     title: string;
+    excerpt: string | null;
     htmlContent: string;
     imageUrl: string | null;
     tags: string[];
@@ -22,9 +23,24 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
     const { id } = await params;
     try {
         const article = await fetchApi<Article>(`/articles/${id}`);
+        const ogImage = getImageSource(article.imageUrl);
+        const description = article.excerpt || `Article technique : ${article.title}`;
+
         return {
             title: `${article.title} - Tommy`,
-            description: `Article technique : ${article.title}`,
+            description: description,
+            openGraph: {
+                title: article.title,
+                description: description,
+                images: ogImage ? [{ url: ogImage }] : [],
+                type: 'article',
+            },
+            twitter: {
+                card: 'summary_large_image',
+                title: article.title,
+                description: description,
+                images: ogImage ? [ogImage] : [],
+            }
         };
     } catch {
         return { title: 'Article introuvable - Tommy' };

@@ -22,9 +22,23 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
     const { id } = await params;
     try {
         const project = await fetchApi<Project>(`/portfolio/projects/${id}`);
+        const ogImage = getImageSource(project.imageUrl);
+
         return {
             title: `${project.title} - Tommy`,
             description: project.description,
+            openGraph: {
+                title: project.title,
+                description: project.description,
+                images: ogImage ? [{ url: ogImage }] : [],
+                type: 'article',
+            },
+            twitter: {
+                card: 'summary_large_image',
+                title: project.title,
+                description: project.description,
+                images: ogImage ? [ogImage] : [],
+            }
         };
     } catch {
         return { title: 'Projet introuvable - Tommy' };
