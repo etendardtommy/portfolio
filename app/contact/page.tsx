@@ -17,7 +17,10 @@ export default function ContactPage() {
         try {
             const res = await fetch(`${API_URL}/messages`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-site-id': '1' // Assuming 1 is the portfolio's site ID
+                },
                 body: JSON.stringify(formData),
             });
 
@@ -44,8 +47,7 @@ export default function ContactPage() {
                 <div className="contact-info animate-fade-in delay-100">
                     <p className="contact-text">
                         Je suis toujours ouvert aux nouvelles opportunités professionnelles,
-                        en particulier celles impliquant des technologies modernes comme React,
-                        TypeScript et l&apos;écosystème Node.js.
+                        .
                     </p>
 
                     <div className="contact-methods">
@@ -79,12 +81,12 @@ export default function ContactPage() {
 
                     {status === 'sent' && (
                         <div className="contact-success">
-                            ✅ Message envoyé avec succès ! Je reviendrai vers vous rapidement.
+                            Message envoyé avec succès ! Je reviendrai vers vous rapidement.
                         </div>
                     )}
                     {status === 'error' && (
                         <div className="contact-error">
-                            ❌ Erreur lors de l&apos;envoi. Veuillez réessayer.
+                            Erreur lors de l&apos;envoi. Veuillez réessayer.
                         </div>
                     )}
 
