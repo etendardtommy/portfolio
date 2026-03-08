@@ -1,10 +1,11 @@
-import { useParams, Link } from 'react-router-dom';
+import { fetchApi } from '@/lib/api';
 import { ArrowLeft, Calendar } from 'lucide-react';
-import DOMPurify from 'dompurify';
-import { useApi } from '../hooks/useApi';
+import Link from 'next/link';
+import DOMPurify from 'isomorphic-dompurify';
+import type { Metadata } from 'next';
 import './ProcedureDetail.css';
 
-const SERVER_URL = import.meta.env.VITE_SERVER_URL || 'http://localhost:3000';
+const SERVER_URL = process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000';
 
 type Article = {
     id: number;
@@ -15,45 +16,60 @@ type Article = {
     createdAt: string;
 };
 
-export function ProcedureDetail() {
-    const { id } = useParams<{ id: string }>();
-    const { data: article, loading } = useApi<Article>(`/articles/${id}`);
+type Params = Promise<{ id: string }>;
 
-    const formatDate = (dateStr: string) => {
-        return new Date(dateStr).toLocaleDateString('fr-FR', {
-            day: 'numeric',
-            month: 'long',
-            year: 'numeric',
-        });
-    };
+export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
+    const { id } = await params;
+    try {
+        const article = await fetchApi<Article>(`/articles/${id}`);
+        return {
+            title: `${article.title} - Tommy`,
+            description: `Article technique : ${article.title}`,
+        };
+    } catch {
+        return { title: 'Article introuvable - Tommy' };
+    }
+}
 
-    const getImageSource = (url: string | null) => {
-        if (!url) return null;
-        if (url.startsWith('http')) return url;
-        // Construct full URL for backend images
-        return `${SERVER_URL}${url}`;
-    };
+function getImageSource(url: string | null) {
+    if (!url) return null;
+    if (url.startsWith('http')) return url;
+    return `${SERVER_URL}${url}`;
+}
 
-    if (loading) {
-        return (
-            <div className="container section" style={{ textAlign: 'center', padding: '4rem' }}>
-                <p style={{ color: 'var(--text-tertiary)' }}>Chargement...</p>
-            </div>
-        );
+function formatDate(dateStr: string) {
+    return new Date(dateStr).toLocaleDateString('fr-FR', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric',
+    });
+}
+
+export default async function ProcedureDetailPage({ params }: { params: Params }) {
+    const { id } = await params;
+    let article: Article | null = null;
+
+    try {
+        article = await fetchApi<Article>(`/articles/${id}`);
+    } catch {
+        article = null;
     }
 
     if (!article) {
         return (
             <div className="container section" style={{ textAlign: 'center', padding: '4rem' }}>
                 <h2>Article introuvable</h2>
-                <Link to="/procedures" className="back-link">← Retour aux articles</Link>
+                <Link href="/procedures" className="back-link">← Retour aux articles</Link>
             </div>
         );
     }
 
+    // Sanitize HTML content server-side
+    const sanitizedHtml = DOMPurify.sanitize(article.htmlContent || '');
+
     return (
         <div className="container section animate-fade-in">
-            <Link to="/procedures" className="back-link">
+            <Link href="/procedures" className="back-link">
                 <ArrowLeft size={18} /> Retour aux articles
             </Link>
 
@@ -90,7 +106,7 @@ export function ProcedureDetail() {
 
                 <div
                     className="article-detail-content"
-                    dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(article.htmlContent || '') }}
+                    dangerouslySetInnerHTML={{ __html: sanitizedHtml }}
                 />
             </article>
         </div>

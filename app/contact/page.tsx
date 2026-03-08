@@ -1,10 +1,12 @@
+'use client';
+
 import { useState } from 'react';
 import { Mail, MapPin, Send } from 'lucide-react';
 import './Contact.css';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://192.168.1.50:5000';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000/api';
 
-export function Contact() {
+export default function ContactPage() {
     const [formData, setFormData] = useState({ name: '', email: '', message: '' });
     const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
 
@@ -13,7 +15,7 @@ export function Contact() {
         setStatus('sending');
 
         try {
-            const res = await fetch(`${API_URL}/api/messages`, {
+            const res = await fetch(`${API_URL}/messages`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData),
@@ -33,8 +35,8 @@ export function Contact() {
             <div style={{ textAlign: 'center' }} className="animate-fade-in">
                 <h1 className="gradient-text">Contactez-moi</h1>
                 <p style={{ maxWidth: '600px', margin: '0 auto' }}>
-                    Une question, une proposition de projet ou simplement envie d'échanger ?
-                    N'hésitez pas à m'envoyer un message via le formulaire.
+                    Une question, une proposition de projet ou simplement envie d&apos;échanger ?
+                    N&apos;hésitez pas à m&apos;envoyer un message via le formulaire.
                 </p>
             </div>
 
@@ -43,7 +45,7 @@ export function Contact() {
                     <p className="contact-text">
                         Je suis toujours ouvert aux nouvelles opportunités professionnelles,
                         en particulier celles impliquant des technologies modernes comme React,
-                        TypeScript et l'écosystème Node.js.
+                        TypeScript et l&apos;écosystème Node.js.
                     </p>
 
                     <div className="contact-methods">
@@ -82,7 +84,7 @@ export function Contact() {
                     )}
                     {status === 'error' && (
                         <div className="contact-error">
-                            ❌ Erreur lors de l'envoi. Veuillez réessayer.
+                            ❌ Erreur lors de l&apos;envoi. Veuillez réessayer.
                         </div>
                     )}
 

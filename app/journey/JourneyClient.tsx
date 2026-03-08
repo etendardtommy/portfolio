@@ -1,27 +1,17 @@
+'use client';
+
 import { useState } from 'react';
 import { Briefcase, GraduationCap } from 'lucide-react';
-import { useApi } from '../hooks/useApi';
-import { experiences as staticExperiences } from '../data/experiences';
+import type { Experience } from './page';
 import './Journey.css';
 
-interface Experience {
-    id: number;
-    type: 'work' | 'education';
-    date: string;
-    title: string;
-    subtitle: string;
-    description: string;
-    skills: string | null;
+interface JourneyClientProps {
+    experiences: Experience[];
+    error: string | null;
 }
 
-export function Journey() {
+export function JourneyClient({ experiences, error }: JourneyClientProps) {
     const [filter, setFilter] = useState<'all' | 'work' | 'education'>('all');
-    const { data: apiExperiences, loading, error } = useApi<Experience[]>('/experience/public');
-
-    console.log('Journey Debug:', { apiExperiences, loading, error });
-
-    // Use API data if available, otherwise fallback to static data
-    const experiences = (apiExperiences && apiExperiences.length > 0) ? apiExperiences : (loading ? [] : staticExperiences);
 
     const filteredData = experiences.filter(item =>
         filter === 'all' ? true : item.type === filter
@@ -79,20 +69,7 @@ export function Journey() {
             )}
 
             <div className="timeline-container animate-fade-in delay-200">
-                {loading ? (
-                    // Skeleton Loaders
-                    Array.from({ length: 3 }).map((_, index) => (
-                        <div key={index} className="timeline-item">
-                            <div className="timeline-dot skeleton" style={{ backgroundColor: 'var(--border-color)', boxShadow: 'none' }}></div>
-                            <div className="glass-panel timeline-content skeleton-card">
-                                <span className="timeline-date skeleton" style={{ width: '120px', height: '24px', backgroundColor: 'var(--border-color)', color: 'transparent' }}>--</span>
-                                <h3 className="timeline-title skeleton" style={{ width: '60%', height: '28px', backgroundColor: 'var(--border-color)' }}></h3>
-                                <div className="timeline-subtitle skeleton" style={{ width: '40%', height: '20px', backgroundColor: 'var(--border-color)', marginTop: '0.5rem' }}></div>
-                                <div className="timeline-description skeleton" style={{ width: '100%', height: '60px', backgroundColor: 'var(--border-color)', marginTop: '1rem' }}></div>
-                            </div>
-                        </div>
-                    ))
-                ) : filteredData.length === 0 ? (
+                {filteredData.length === 0 ? (
                     <p style={{ textAlign: 'center', color: 'var(--text-tertiary)' }}>Aucune expérience pour le moment.</p>
                 ) : (
                     <>
@@ -121,11 +98,6 @@ export function Journey() {
                     </>
                 )}
             </div>
-            {error && !loading && apiExperiences?.length === 0 && (
-                <p className="text-center mt-8 text-sm opacity-50 flex items-center justify-center gap-2">
-                    Note: Connexion au serveur impossible, affichage des données locales.
-                </p>
-            )}
         </div>
     );
 }

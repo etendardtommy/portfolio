@@ -1,27 +1,19 @@
+'use client';
+
 import { useState } from 'react';
 import { Calendar, Search, ArrowRight } from 'lucide-react';
-import { Link } from 'react-router-dom';
-import { useApi } from '../hooks/useApi';
+import Link from 'next/link';
+import type { Article } from './page';
 import './Procedures.css';
 
-const SERVER_URL = import.meta.env.VITE_SERVER_URL || 'http://localhost:3000';
+const SERVER_URL = process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000';
 
-type Article = {
-    id: number;
-    title: string;
-    excerpt: string | null;
-    tags: string[];
-    imageUrl: string | null;
-    createdAt: string;
-    published: boolean;
-};
+interface ProceduresClientProps {
+    articles: Article[];
+}
 
-export function Procedures() {
+export function ProceduresClient({ articles }: ProceduresClientProps) {
     const [searchTerm, setSearchTerm] = useState('');
-    const { data, loading } = useApi<Article[]>('/articles');
-
-    // Afficher uniquement les articles publiés
-    const articles = data ? data.filter((a) => a.published) : [];
 
     const formatDate = (dateStr: string) => {
         return new Date(dateStr).toLocaleDateString('fr-FR', {
@@ -34,7 +26,6 @@ export function Procedures() {
     const getImageSource = (url: string | null) => {
         if (!url) return null;
         if (url.startsWith('http')) return url;
-        // Construct full URL for backend images
         return `${SERVER_URL}${url}`;
     };
 
@@ -67,28 +58,11 @@ export function Procedures() {
             </div>
 
             <div className="articles-list animate-fade-in delay-200" style={{ minHeight: '50vh' }}>
-                {loading ? (
-                    Array.from({ length: 3 }).map((_, i) => (
-                        <div key={i} className="skeleton-card" style={{ height: 'auto', padding: '1.5rem 1.5rem 2rem 1.5rem' }}>
-                            <div className="skeleton skeleton-image" style={{ height: '180px', marginBottom: '1rem' }}></div>
-                            <div className="skeleton skeleton-text-short" style={{ marginBottom: '1rem' }}></div>
-                            <div className="skeleton skeleton-title" style={{ marginBottom: '1rem' }}></div>
-                            <div className="skeleton skeleton-text"></div>
-                            <div className="skeleton skeleton-text" style={{ marginBottom: '1.5rem' }}></div>
-                            <div className="skeleton-tags" style={{ justifyContent: 'space-between' }}>
-                                <div style={{ display: 'flex', gap: '8px' }}>
-                                    <div className="skeleton skeleton-tag"></div>
-                                    <div className="skeleton skeleton-tag"></div>
-                                </div>
-                                <div className="skeleton skeleton-tag" style={{ width: '100px' }}></div>
-                            </div>
-                        </div>
-                    ))
-                ) : filteredArticles.length > 0 ? (
+                {filteredArticles.length > 0 ? (
                     <>
                         {filteredArticles.map(article => (
                             <div key={article.id} className="article-wrapper">
-                                <Link to={`/procedures/${article.id}`} className="article-card" style={{ display: 'block' }}>
+                                <Link href={`/procedures/${article.id}`} className="article-card" style={{ display: 'block' }}>
                                     {article.imageUrl && (
                                         <div className="article-cover" style={{
                                             height: '180px',

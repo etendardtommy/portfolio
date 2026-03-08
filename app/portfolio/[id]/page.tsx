@@ -1,9 +1,10 @@
-import { useParams, Link } from 'react-router-dom';
+import { fetchApi } from '@/lib/api';
 import { ArrowLeft, ExternalLink, Github } from 'lucide-react';
-import { useApi } from '../hooks/useApi';
+import Link from 'next/link';
+import type { Metadata } from 'next';
 import './ProjectDetail.css';
 
-const SERVER_URL = import.meta.env.VITE_SERVER_URL || 'http://localhost:3000';
+const SERVER_URL = process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000';
 
 type Project = {
     id: number;
@@ -15,36 +16,49 @@ type Project = {
     technologies: string[];
 };
 
-export function ProjectDetail() {
-    const { id } = useParams<{ id: string }>();
-    const { data: project, loading } = useApi<Project>(`/portfolio/projects/${id}`);
+type Params = Promise<{ id: string }>;
 
-    const getImageSource = (url: string | null) => {
-        if (!url) return null;
-        if (url.startsWith('http')) return url;
-        return `${SERVER_URL}${url}`;
-    };
+export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
+    const { id } = await params;
+    try {
+        const project = await fetchApi<Project>(`/portfolio/projects/${id}`);
+        return {
+            title: `${project.title} - Tommy`,
+            description: project.description,
+        };
+    } catch {
+        return { title: 'Projet introuvable - Tommy' };
+    }
+}
 
-    if (loading) {
-        return (
-            <div className="container section" style={{ textAlign: 'center', padding: '4rem' }}>
-                <p style={{ color: 'var(--text-tertiary)' }}>Chargement...</p>
-            </div>
-        );
+function getImageSource(url: string | null) {
+    if (!url) return null;
+    if (url.startsWith('http')) return url;
+    return `${SERVER_URL}${url}`;
+}
+
+export default async function ProjectDetailPage({ params }: { params: Params }) {
+    const { id } = await params;
+    let project: Project | null = null;
+
+    try {
+        project = await fetchApi<Project>(`/portfolio/projects/${id}`);
+    } catch {
+        project = null;
     }
 
     if (!project) {
         return (
             <div className="container section" style={{ textAlign: 'center', padding: '4rem' }}>
                 <h2>Projet introuvable</h2>
-                <Link to="/portfolio" className="back-link">← Retour au portfolio</Link>
+                <Link href="/portfolio" className="back-link">← Retour au portfolio</Link>
             </div>
         );
     }
 
     return (
         <div className="container section animate-fade-in">
-            <Link to="/portfolio" className="back-link">
+            <Link href="/portfolio" className="back-link">
                 <ArrowLeft size={18} /> Retour au portfolio
             </Link>
 
