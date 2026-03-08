@@ -15,8 +15,7 @@ export function Home() {
                         </h1>
                         <p className="hero-description">
                             Bienvenue sur mon portfolio. Découvrez mon parcours, mes projets
-                            et mes articles techniques. Passionné par la création d'interfaces
-                            modernes et intuitives.
+                            et mes articles techniques. Je développe mes compétences à travers des projets d'infrastructure réels.
                         </p>
                         <div className="hero-actions animate-fade-in delay-100">
                             <Link to="/portfolio" className="btn-primary">
