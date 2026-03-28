@@ -4,6 +4,8 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 import './ProjectDetail.css';
 
+export const dynamicParams = false;
+
 const SERVER_URL = process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000';
 
 type Project = {
@@ -17,6 +19,19 @@ type Project = {
 };
 
 type Params = Promise<{ id: string }>;
+
+export async function generateStaticParams() {
+    try {
+        const projects = await fetchApi<{ id: number }[]>('/portfolio/projects');
+        if (!projects || projects.length === 0) {
+            return [{ id: '1' }];
+        }
+        return projects.map((project) => ({ id: String(project.id) }));
+    } catch (e) {
+        console.error("fetch API failed in generateStaticParams", e);
+        return [{ id: '1' }];
+    }
+}
 
 export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
     const { id } = await params;

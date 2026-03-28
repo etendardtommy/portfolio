@@ -5,6 +5,8 @@ import DOMPurify from 'isomorphic-dompurify';
 import type { Metadata } from 'next';
 import './ProcedureDetail.css';
 
+export const dynamicParams = false;
+
 const SERVER_URL = process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000';
 
 type Article = {
@@ -18,6 +20,19 @@ type Article = {
 };
 
 type Params = Promise<{ id: string }>;
+
+export async function generateStaticParams() {
+    try {
+        const articles = await fetchApi<{ id: number }[]>('/articles');
+        if (!articles || articles.length === 0) {
+            return [{ id: '1' }];
+        }
+        return articles.map((article) => ({ id: String(article.id) }));
+    } catch (e) {
+        console.error("fetch API failed in generateStaticParams procedures", e);
+        return [{ id: '1' }];
+    }
+}
 
 export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
     const { id } = await params;

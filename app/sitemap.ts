@@ -1,6 +1,8 @@
 import type { MetadataRoute } from 'next';
 import { fetchApi } from '@/lib/api';
 
+export const dynamic = 'force-static';
+
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001';
 
 type Project = { id: number; published: boolean };
