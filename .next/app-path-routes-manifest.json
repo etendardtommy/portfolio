@@ -1,0 +1,13 @@
+{
+  "/_global-error/page": "/_global-error",
+  "/_not-found/page": "/_not-found",
+  "/contact/page": "/contact",
+  "/favicon.ico/route": "/favicon.ico",
+  "/journey/page": "/journey",
+  "/page": "/",
+  "/portfolio/[id]/page": "/portfolio/[id]",
+  "/portfolio/page": "/portfolio",
+  "/procedures/[id]/page": "/procedures/[id]",
+  "/procedures/page": "/procedures",
+  "/sitemap.xml/route": "/sitemap.xml"
+}

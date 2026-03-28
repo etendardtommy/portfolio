@@ -1,0 +1,13 @@
+{
+  "/_global-error/page": "app/_global-error/page.js",
+  "/_not-found/page": "app/_not-found/page.js",
+  "/contact/page": "app/contact/page.js",
+  "/favicon.ico/route": "app/favicon.ico/route.js",
+  "/journey/page": "app/journey/page.js",
+  "/page": "app/page.js",
+  "/portfolio/[id]/page": "app/portfolio/[id]/page.js",
+  "/portfolio/page": "app/portfolio/page.js",
+  "/procedures/[id]/page": "app/procedures/[id]/page.js",
+  "/procedures/page": "app/procedures/page.js",
+  "/sitemap.xml/route": "app/sitemap.xml/route.js"
+}

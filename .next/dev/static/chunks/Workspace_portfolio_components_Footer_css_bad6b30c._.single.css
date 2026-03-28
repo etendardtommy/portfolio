@@ -1,0 +1,49 @@
+/* [project]/Workspace/portfolio/components/Footer.css [app-client] (css) */
+.footer {
+  border-top: 1px solid var(--border-color);
+  background-color: var(--bg-primary);
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 120px;
+  display: flex;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+}
+
+.footer-content {
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1.5rem;
+  display: flex;
+}
+
+.social-links {
+  gap: 1rem;
+  display: flex;
+}
+
+.social-icon {
+  color: var(--text-secondary);
+  border-radius: var(--radius-full);
+  background-color: var(--bg-secondary);
+  width: 44px;
+  height: 44px;
+  transition: all var(--transition-fast);
+  border: 1px solid var(--border-color);
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}
+
+.social-icon:hover {
+  color: #fff;
+  background-color: var(--brand-primary);
+  border-color: var(--brand-primary);
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px #3b82f666;
+}
+
+/*# sourceMappingURL=Workspace_portfolio_components_Footer_css_bad6b30c._.single.css.map*/
